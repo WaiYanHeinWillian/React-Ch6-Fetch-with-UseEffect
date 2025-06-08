@@ -1,45 +1,44 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {  useState } from 'react'
+import useFetch from '../../hooks/useFetch';
+import "./index.css";
 
 export default function Index() {
 
-    let [trips,setTrips]=useState([]);
+    
     let [url,setUrl]=useState("http://localhost:3000/trips");
 
-    let fetchTrips=useCallback(()=>{
-        fetch(url)
-        .then(res=>res.json())
-        .then(data=>{
-            setTrips(data);
-        })
-    },[url]);
-
-    useEffect(()=>{
-        fetchTrips();
-        
-    },[fetchTrips]);
-
-console.log(trips);
-    
+    let {data : trips , loading  , error} = useFetch(url);
 
   return (
-    <div>
+    <div className='container'>
+        {error && <p>{error}</p>}
+        
+        {!error &&
+        
+            <div className='flex-container'>
+                <h1>Ready to go ?</h1>
 
-        <h1>Ready to go ?</h1>
+                {loading && <p>loading trips...</p>}
 
-        <button onClick={()=>setUrl("http://localhost:3000/trips")}>All</button>
-        <button onClick={()=>setUrl("http://localhost:3000/trips?Location=Myanmar")}>Trips in Myanmar</button>
+                <div>
+                    <button onClick={()=>setUrl("http://localhost:3000/trips")}>All</button>
+                    <button onClick={()=>setUrl("http://localhost:3000/trips?Location=Myanmar")}>Trips in Myanmar</button>
+                </div>
 
-        <ul>
-            {
-                trips.map(trip=>(
-                    <li key={trip.id}>
-                        <h3>{trip.name}</h3>
-                        <p>{trip.price}</p>
-                    </li>
-                ))
-            }
-        </ul>
+                <ul className='trips-list'>
+                    {
+                        trips && trips.map(trip=>(
+                            <li key={trip.id} className='trip'>
+                                <h3>{trip.name}</h3>
+                                <p>{trip.price}</p>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
 
+        }
     </div>
+
   )
 }
