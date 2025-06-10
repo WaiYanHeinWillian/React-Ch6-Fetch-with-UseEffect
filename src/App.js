@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import TripList from './components/TripList/index.js';
 
 function App() {
 
-  let [show,setShow]=useState(true);  
+  let [data,setData]=useState('mydata');
 
-  return (
-    <>
-      <button onClick={()=>setShow(false)}>Hide Trips</button>
-      {show && <TripList/>}
-    </>
-  );
+  let myfunction=()=>{
+    setData("new update data") //rendering stop
+  }
+
+  useEffect(()=>{
+    myfunction();
+    console.log("running")
+  },[myfunction])
+
+  return <>
+    <h1>{data}</h1>
+    <TripList/>
+  </>
 }
 
 export default App;
