@@ -8,8 +8,13 @@ function useFetch(url){
     
 
     useEffect(()=>{
+
+        let abortController=new AbortController();
+        let signal=abortController.signal;
+
         setLoading(true);
-        fetch(url)
+
+        fetch(url,{signal})
         .then(res=>{
             //throw error
             if(!res.ok){
@@ -25,6 +30,12 @@ function useFetch(url){
         .catch(e=>{
             setError(e.message);
         })
+
+        // cleanup function
+        return ()=>{
+            abortController.abort();
+        }
+
     },[url]);
     return {data,loading,error}; //{data:data}
 }
