@@ -7,7 +7,7 @@ export default function Index() {
     
     let [url,setUrl]=useState("http://localhost:3000/trips");
 
-    let {data : trips , loading  , error} = useFetch(url);
+    let {data : trips , loading  , error} = useFetch(url,{type:"GET"});
 
   return (
     <div className='container'>
